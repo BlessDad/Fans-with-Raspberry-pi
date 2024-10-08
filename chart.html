@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Chart JS로 차트 그리기</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" type="text/javascript"></script>
+	<script>
+		var ctx = null
+		var chart = null
+		function drawChart() {
+			ctx = document.getElementById('canvas').getContext('2d');
+			chart = new Chart(ctx, {
+				// type은 차트 종류 지정
+				type: 'line', /* line 등으로 바꿀 수 있음 */
+
+				// data는 차트에 출력될 전체 데이터 표현
+				data: {
+					// labels는 배열로 데이터의 레이블들
+					labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+					// datasets 배열로 이 차트에 그려질 모든 데이터 셋 표현. 아래는 그래프 1개만 있는 경우
+					datasets: [{
+						label: '막대 그래프 사례',
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'yellow',
+						data: [5, 10, 5, 2, 20, 30, 45] /* 각 레이블에 해당하는 데이터 */
+					}]
+				},
+
+				//  차트의 속성 지정
+				options: {
+					responsive : false // 크기 조절 금지
+				}
+			});
+		} // end of drawChart()
+		function change(month, value) { // 첫 막대의 이름을 month로 바꾸고 값을 value로 변경
+			chart.data.labels[0] = month;
+			chart.data.datasets[0].data[0] = value;
+			chart.update()
+		}
+
+		function add(label, value) { // 그래프에 label 이름의 새로운 막대 삽입. 값 value로 설정
+			chart.data.labels.push(label);
+			chart.data.datasets[0].data.push(value)
+			chart.update()
+		}
+
+		function remove() { // 그래프에서 맨 앞의 막대 제거
+			chart.data.labels.shift(); // labels[] 배열에서 맨 앞 막대 제거
+			chart.data.datasets[0].data.shift() // data[] 배열에서 맨 앞 원소 1개 제거
+			chart.update()
+		}
+
+		window.addEventListener("load", drawChart); // load 이벤트가 발생하면 drawChart() 호출하도록 등록
+	  </script>
+ 
+	<style>
+		canvas {background-color:lightblue}
+	</style>
+</head>
+<body>
+	<h3>막대 그래프 차트 샘플</h3>
+	<hr>
+	<canvas id="canvas" width="320" height="240"></canvas>
+	<button type="button" onclick="change('1월', 70)">1월로 바꾸기</button>
+	<button type="button" onclick="add('August', 30)">August, 30 추가</button>
+	<button type="button" onclick="remove()">맨앞 막대 제거</button>    
+</body>
+</html>
